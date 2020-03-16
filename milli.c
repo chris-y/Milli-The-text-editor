@@ -1,8 +1,10 @@
+#pragma output CLIB_MALLOC_HEAP_SIZE = -1
 #define _DEFAULT_SOURCE
 #define _BSD_SOURCE
 #define _GNU_SOURCE
 
 /*** includes ***/
+#include <malloc.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -10,7 +12,7 @@
 #include <errno.h>
 #include <string.h>
 #include <sys/ioctl.h>
-#include <malloc.h>
+//#include <malloc.h>
 //#include <sys/types.h>
 
 void die(const char *s);
