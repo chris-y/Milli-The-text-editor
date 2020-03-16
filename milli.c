@@ -3,7 +3,6 @@
 #define _GNU_SOURCE
 
 /*** includes ***/
-#include <termios.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -81,43 +80,9 @@ struct editorConfig E;
 
 int getWindowSize(int *rows, int *cols)
 {
-  struct winsize ws;
-
-  if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1 || ws.ws_col == 0)
-  {
-    if (write(STDOUT_FILENO, "\x1b[999C\x1b[999B", 12) != 12)
-    {
-      return -1;
-    }
-    int res = getCursorPosition(rows, cols);
-    return res;
-  }
-  else
-  {
-    *cols = ws.ws_col;
-    *rows = ws.ws_row;
-    return 0;
-  }
-}
-
-void disableRawMode() {
-  if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &E.orig_termios) == -1)
-    die("tcsetattr");
-}
-void enableRawMode() {
-  if (tcgetattr(STDIN_FILENO, &E.orig_termios) == -1)
-    die("tcgetattr");
-  atexit(disableRawMode);
-  struct termios raw = E.orig_termios;
-  raw.c_oflag &= ~(OPOST);
-  raw.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
-  raw.c_cflag |= (CS8);
-  raw.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
-  raw.c_cc[VMIN] = 0;
-  raw.c_cc[VTIME] = 1;
-
-  if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) == -1)
-    die("tcsetattr");
+  *cols = 32;
+  *rows = 20;
+  return 0;
 }
 
 void die(const char *s)
@@ -398,7 +363,6 @@ void editorMoveCursor(int key)
 
 /*** init ***/
 int main(int argc, char *argv[]) {
-  enableRawMode();
   initEditor();
   if (argc >= 2) {
     editorOpen(argv[1]);
