@@ -10,7 +10,8 @@
 #include <errno.h>
 #include <string.h>
 #include <sys/ioctl.h>
-#include <sys/types.h>
+#include <malloc.h>
+//#include <sys/types.h>
 
 void die(const char *s);
 void editorMoveCursor(int key);
@@ -73,7 +74,6 @@ struct editorConfig
   int numrows;
   erow *row;
   int rowoff;
-  struct termios orig_termios;
 };
 struct editorConfig E;
 /*** terminal ***/
