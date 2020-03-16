@@ -1,0 +1,2 @@
+milli: milli.c
+	zcc +zxn -v -startup=30 -clib=sdcc_iy -SO3 --opt-code-size milli.c -o milli -subtype=dotn -create-app
